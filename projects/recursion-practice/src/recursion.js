@@ -5,16 +5,50 @@
 // Example:  5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5);  // 120
 var factorial = function(n) {
+  // base
+  if (n < 0) { // returns null if n is less than 0
+    return null;
+  }
+  if (n <= 1) { // returns 1 if n is equal to or less than 1
+    return 1;
+  }
+
+  // recursion
+    // multiply n by a call of factorial with n-1 as the parameter to keep the process moving
+  return n * factorial(n - 1);
 };
 
 // 2. Compute the sum of an array of integers.
 // Example:  sum([1, 2, 3, 4, 5, 6]);  // 21
-var sum = function(array) {
+var sum = function(array, i = 0) {
+  // base
+  if (i >= array.length) { // returns 0 if i becomes equal to or greater than the length of the array
+    return 0;
+  }
+
+  // recursion
+    // add the current item of the input array (determined by the value of i) to a call of sum with i incremented by 1 in the parameters to keep the process moving
+  return array[i] + sum(array, i + 1);
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
-var arraySum = function(array) {
+var arraySum = function(array, i = 0, output = 0) {
+  // base
+  return 0;
+  if (i >= array.length) { // returns 0 if i becomes equal to or greater than the length of the array
+    return 0;
+  }
+  console.log(output);
+  // recursion
+    // determine if current item in the input array is an array
+  if (Array.isArray(array[i]) === true) {
+    output += arraySum(array[i])
+  } else {
+    // add the current item of the input array (determined by the value of i) to a call of arraySum with i incremented by 1 in the parameters to keep the process moving
+    output += array[i];
+    return output + arraySum(array, i + 1, output);
+  }
 };
 
 // 4. Check if a number is even.
@@ -29,7 +63,28 @@ var sumBelow = function(n) {
 
 // 6. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
-var range = function(x, y) {
+var range = function(x, y, output=[]) {
+  if (x < y) { // code to run if starting integer is smaller than the ending integer
+    // base
+    if (x >= y - 1) {
+      return output;
+    }
+    // recursion
+      // update output
+    output.push(x + 1);
+      // invoke range to keep the process moving by incrementing x
+    return range(x + 1, y, output);
+  } else { // code to run if starting integer is bigger than the ending integer
+    // base
+    if (x <= y + 1) {
+      return output;
+    }
+    // recursion
+      // update output
+    output.push(x - 1);
+      // invoke range to keep the process moving by decrementing x
+    return range(x - 1, y, output);
+  }
 };
 
 // 7. Compute the exponent of a number.
