@@ -244,32 +244,95 @@ var gcd = function(x, y) {
 // compareStr('', '') // true
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
+  // base
+  if (str1.length === 0 && str2.length === 0) { // returns true if the length of both input strings become 0
+    return true;
+  } else if (str1.length === 0 || str2.length === 0) {// returns false if the length of only one of the input strings becomes 0
+    return false;
+  } else if (str1[0] !== str2[0]) {// returns false if a character from str1 does not equal a character from the same index (index 0) in str2
+    return false;
+  }
+
+  // recursion
+    // return a call of compareStr with copies of both input strings that had the first character sliced off of them as the parameters to keep the process moving
+  return compareStr(str1.slice(1), str2.slice(1));
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
-var createArray = function(str){
+var createArray = function(str, output=[]){
+  // base
+  if (str.length === 0) { // returns the output array if the length of the input string becomes 0
+    return output;
+  }
+
+  // recursion
+    // push the first character of the input string into the output array
+  output.push(str[0]);
+    // return a call of createArray with a copy of the input string that had the first character sliced off of it and the output array as the parameters to keep the process moving
+  return createArray(str.slice(1), output);
 };
 
 // 17. Reverse the order of an array
-var reverseArr = function (array) {
+var reverseArr = function (array, output=[]) {
+  // base
+  if (array.length === 0) { // returns the output array if the length of the input array becomes 0
+    return output;
+  }
+
+  // recursion
+    // push the last character of the input array into the output array
+  output.push(array[array.length-1]);
+    // return a call of reverseArr with a copy of the input array that had the last value sliced off of it and the output array as the parameters to keep the process moving
+  return reverseArr(array.slice(0, array.length-1), output);
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
-var buildList = function(value, length) {
+var buildList = function(value, length, output=[]) {
+  // base
+  if (output.length === length) { // returns the output array if the length of the output array becomes equal to the input length
+    return output;
+  }
+
+  // recursion
+    // push the input value into the output array
+  output.push(value);
+    // return a call of buildList with the input value, input length, and the output array as the parameters to keep the process moving
+  return buildList(value, length, output);
 };
 
 // 19. Count the occurence of a value inside a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
-var countOccurrence = function(array, value) {
+var countOccurrence = function(array, value, output=0) {
+  // base
+  if (array.length === 0) { // returns the output number if the length of the input array becomes 0
+    return output;
+  }
+
+  // recursion
+  if (array[0] === value) { // check if the first item in the input array is equal to the input value
+    output++; // increment the output number by 1 if so
+  }
+    // return a call of countOccurrence with a copy of the input array that had the first value sliced off of it, the input value, and the output number as the parameters to keep the process moving
+  return countOccurrence(array.slice(1), value, output);
 };
 
 // 20. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
-var rMap = function(array, callback) {
+var rMap = function(array, callback, output=[]) {
+  // base
+  if (array.length === 0) { // returns the output array if the length of the input array becomes 0
+    return output;
+  }
+
+  // recursion
+    // push the result of calling the inputted callback function with the first item from the input array into the output array
+  output.push(callback(array[0]));
+    // return a call of rMap with a copy of the input array that had the first value sliced off of it, the inputted callback function, and the output array as the parameters to keep the process moving
+  return rMap(array.slice(1), callback, output);
 };
 
 // 21. Write a function that counts the number of times a key occurs in an object.
@@ -304,18 +367,49 @@ var fibonacci = function(n) {
 // nthFibo(5); // 5
 // nthFibo(7); // 13
 // nthFibo(3); // 2
-var nthFibo = function(n) {
+var nthFibo = function(n, fib=[0, 1]) {
+  // base
+  if (n < 0) { // return null if n is negative
+    return null;
+  }
+  if (fib.length > n) { // otherwise, check if the fib array now contains the n index
+    return fib[n]; // return the number at the n index if so
+  }
+  // recursion
+  fib.push(fib[fib.length-1] + fib[fib.length-2]) // otherwise, push the result of adding the last two numbers of the fib array together to the end of the fib array
+  return nthFibo(n, fib); // recurse the function with n and fib as parameters
 };
 
 // 26. Given an array of words, return a new array containing each word capitalized.
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
-var capitalizeWords = function(input) {
+var capitalizeWords = function(input, output=[]) {
+  // base
+  if (input.length === 0) { // returns the output array if the length of the input array (input) becomes 0
+    return output;
+  }
+
+  // recursion
+    // push the result using the .toUpperCase() method with the first item from the input array (input) into the output array
+  output.push(input[0].toUpperCase());
+    // return a call of capitalizeWords with a copy of the input array (input) that had the first value sliced off of it and the output array as the parameters to keep the process moving
+  return capitalizeWords(input.slice(1), output);
 };
 
 // 27. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car', 'poop', 'banana']); // ['Car', 'Poop', 'Banana']
-var capitalizeFirst = function(array) {
+var capitalizeFirst = function(array, output=[]) {
+  // base
+  if (array.length === 0) { // returns the output array if the length of the input array becomes 0
+    return output;
+  }
+
+  // recursion
+    // push into the output array the result using the .toUpperCase() method with the first character from the first item from the input array and then adding the methods result to the front of a clone of the first item in the input array that had its first character sliced off
+    // tldr, capitalize the first letter of each word in the input array and assign the modified version of each word to the output array
+  output.push(array[0][0].toUpperCase() + array[0].slice(1));
+    // return a call of capitalizeFirst with a copy of the input array that had the first value sliced off of it and the output array as the parameters to keep the process moving
+  return capitalizeFirst(array.slice(1), output);
 };
 
 // 28. Return the sum of all even numbers in an object containing nested objects.
