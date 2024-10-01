@@ -53,12 +53,43 @@ var arraySum = function(array, i = 0, output = 0) {
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  // force n to become positive if it is negative (aka, get n's absolute value)
+  if (n < 0) {
+    n = n - (2 * n);
+  }
+
+  // base
+  if (n === 1) { // returns false if n becomes equal to 1
+    return false;
+  } else if (n === 0) { // returns true if n becomes equal to 0
+    return true;
+  }
+
+  // recursion
+    // return a call of isEven with n-2 as the parameter to keep the process moving
+  return isEven(n - 2);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  // base
+  if (n === 0) { // returns 0 if n is equal to 0
+    return 0;
+  }
+
+  // recursion
+  // if n is positive
+  if (n > 0) {
+    // decrement n by 1
+    n--;
+  } else { // otherwise...
+    // increment n by 1
+    n++;
+  }
+  // add n to a call of sumBelow with as n the parameter to keep the process moving
+  return n + sumBelow(n);
 };
 
 // 6. Get the integers in range (x, y).
@@ -93,21 +124,74 @@ var range = function(x, y, output=[]) {
 // Example:  exponent(4,3);  // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  // base
+  if (exp === 0) { // returns 1 if exp is equal to 0
+    return 1;
+  }
+  if (exp === 1) { // returns base if exp is equal to 1
+    return base;
+  }
+
+  // recursion
+  // if exp is positive
+  if (exp > 0) {
+    // multiply base with a call of exponent with base and exp-1 as the parameters to keep the process moving
+    return base * exponent(base, exp - 1);
+  } else { // otherwise...
+    // multiply 1/base with a call of exponent with base and exp+1 as the parameters to keep the process moving
+    return ((100 * (1 / base)) * exponent(base, exp + 1)) / 100; // multiply each value (1/base) by a "high number" (like one hundred) before multiplying said value by another value (from the function call) and then dividing the outcome by the same "high number" (100 in this case) to help prevent the errors that usually occur when dealing with large decimal values
+  }
 };
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
-var powerOfTwo = function(n) {
+var powerOfTwo = function(n, comparison = 1) {
+  // base
+  if (comparison > n) { // returns false if the comparison becomes bigger than n
+    return false;
+  } else if (n === comparison) { // returns true if n becomes equal to the comparison
+    return true;
+  }
+
+  // recursion
+    // return a call of powerOfTwo with n and comparison*2 as the parameters to keep the process moving
+  return powerOfTwo(n, comparison * 2);
 };
 
 // 9. Write a function that accepts a string a reverses it.
-var reverse = function(string) {
+var reverse = function(string, i = string.length - 1, newString = "") {
+  // base
+  if (i < 0) { // returns newString if i becomes less than 0
+    return newString;
+  }
+
+  // recursion
+    // concatenate newString with the character from string that corresponds to the current i value
+  newString += string[i];
+    // return a call of reverse with string, i-1, and newString as the parameters to keep the process moving
+  return reverse(string, i - 1, newString);
 };
 
 // 10. Write a function that determines if a string is a palindrome.
-var palindrome = function(string) {
+var palindrome = function(string, i = string.length - 1, newString = "") {
+  // base
+  if (i < 0) { // checks if i is less than 0
+    // if so, check if newString is equal to string, making sure to remove spaces from both strings and to make both strings lowercase
+    if (newString.toLowerCase().replaceAll(' ', '') === string.toLowerCase().replaceAll(' ', '')) {
+      // return true if so
+      return true;
+    }
+    // return false otherwise
+    return false;
+  }
+
+  // recursion
+    // concatenate newString with the character from string that corresponds to the current i value
+  newString += string[i];
+    // return a call of palindrome with string, i-1, and newString as the parameters to keep the process moving
+  return palindrome(string, i - 1, newString);
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -121,7 +205,24 @@ var modulo = function(x, y) {
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
 // ATTENTION DO NOT LEAVE COMMENTS IN THIS FUNCTION. The test is looking for any ('/').
+
+// this function essentially works by adding x to itself y amount of times and then returning the resulting sum + 0 after decrementing y enough times for it to equal (or be less than) 0
+// this function also forces x and y to become positive if they are both negative (aka, get the absolute value of both)
+// this function also switches the polarities (positive or negative) of x and y if the original x is positive and the original y is negative
 var multiply = function(x, y) {
+  if (x < 0 && y < 0) {
+    x -= x + x;
+    y -= y + y;
+  } else if (y < 0 && x > 0) {
+    x -= x + x;
+    y -= y + y;
+  }
+
+  if (y <= 0) {
+    return 0;
+  }
+
+  return x + multiply(x, y - 1);
 };
 
 // 13. Write a function that divides two numbers without using the / operator  or
